@@ -8,8 +8,8 @@ const connectDB = async () => {
         const connectionInstance = mongoose.connect(`${process.env.DATABASE_URI}/${DB_NAME}?authSource=admin`);
         console.log(`Mongo connected !!! Mongo Host: ${(await connectionInstance).connection.host}`);
     } catch (error) {
-        console.error('error connecting with database: ', error);
-        process.exit(1);
+        console.error('MONGODB connection FAILED (connectDB): ', error);
+        throw error;
     }
 
 }

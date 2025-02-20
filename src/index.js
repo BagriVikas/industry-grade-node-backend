@@ -1,33 +1,23 @@
 import connectDB from "./db/config.js";
 import 'dotenv/config';
+import app from './app.js';
 
-connectDB();
+connectDB()
+.then(() => {
+    
+    console.log('MONGODB connection SUCCESSFUL');
+    
+    app.on('error', (error) => {
+        console.error('APP run FAILED: ', error);
+        process.exit(1);
+    });
 
-// console.log('precess.env: ', process.env);
-// console.log('database uri: ', process.env.DATABASE_URI);
+    app.listen(process.env.PORT || 8081, () => {
+        console.log(`App is running at port: ${process.env.PORT || 8081}`);
+    });
 
-/*
-const app = express();
-
-// IIFE: Immediately Invoked Function Expression
-;( async () => {
-    try {
-        
-        await mongoose.connect(`${process.env.DATABASE_URI}/${DB_NAME}?authSource=admin`);
-        console.log('successfully connected to MongoDB');
-
-        app.on("error", (error) => {
-            console.error("Error with app while connecting with Mongo: ", error);
-            throw error;
-        });
-
-        app.listen(process.env.PORT, () => {
-            console.log(`app is listening on port ${process.env.PORT}`);
-        })
-
-    } catch (error) {
-        console.error("Error connecting with MongoDB: ", error);
-        throw error;
-    }
-})();
-*/
+})
+.catch((error) => {
+    console.error('MONGODB connection FAILED (index.js): ', error);
+    process.exit(1);
+});
